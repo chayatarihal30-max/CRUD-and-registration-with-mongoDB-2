@@ -1,87 +1,76 @@
 # JWT Authentication & Notes CRUD Application
 
-A full-stack Notes Management application built with **React**, **Node.js**, **Express**, **MongoDB Atlas**, **JWT Authentication**, and **bcrypt**. Users can register, log in securely, and manage their personal notes using protected REST API endpoints.
+A full-stack Notes application built with **React.js**, **Node.js**, **Express.js**, **MongoDB Atlas**, **JWT Authentication**, and **Bcrypt**.
+
+Users can register, log in securely, and perform complete CRUD (Create, Read, Update, Delete) operations on their own notes.
 
 ---
 
 # Features
 
-## User Authentication
-
-* User Registration
-* User Login
-* Password hashing with **bcryptjs**
-* JWT-based authentication
-* Protected API routes
-* User Logout
-
-## Notes Management
-
-* Create new notes
-* View all personal notes
-* Edit existing notes
-* Delete notes
-* Notes are accessible only to the authenticated user
-
-## Frontend
-
-* React functional components
-* React Hooks (`useState`, `useEffect`)
-* Responsive user interface
-* Login and Registration forms
-* Error and success messages
-* Simple and clean design
-
-## Backend
-
-* RESTful API using Express.js
-* MongoDB Atlas database
-* Mongoose ODM
-* JWT Authentication Middleware
-* Password encryption using bcryptjs
-* CORS enabled
-* Environment variable support using dotenv
+- User Registration
+- Secure Login using JWT
+- Password Hashing using Bcrypt
+- Protected API Routes
+- Create Notes
+- View Notes
+- Edit Notes
+- Delete Notes
+- MongoDB Atlas Database
+- Responsive React Frontend
+- REST API Architecture
 
 ---
 
-# Technologies Used
+# Technology Stack
 
-## Frontend
+### Frontend
 
-* React
-* JavaScript (ES6)
-* CSS3
-* Fetch API
+- React.js
+- CSS3
+- Fetch API
 
-## Backend
+### Backend
 
-* Node.js
-* Express.js
-* MongoDB Atlas
-* Mongoose
-* JWT (jsonwebtoken)
-* bcryptjs
-* dotenv
-* CORS
+- Node.js
+- Express.js
+- JWT (jsonwebtoken)
+- bcryptjs
+- dotenv
+- cors
+
+### Database
+
+- MongoDB Atlas
+- Mongoose
 
 ---
 
 # Project Structure
 
-```text
-project/
+```
+jwt-notes-app/
 │
-├── backend/
-│   ├── index.js
-│   ├── .env
-│   ├── package.json
-│
-├── frontend/
+├── client/
+│   ├── public/
 │   ├── src/
-│   │   ├── App.jsx
-│   │   ├── App.css
-│   │   ├── main.jsx
-│   ├── package.json
+│   │    ├── App.jsx
+│   │    ├── App.css
+│   │    └── main.jsx
+│   └── package.json
+│
+├── server/
+│   ├── server.js
+│   ├── .env
+│   └── package.json
+│
+├── assets/
+│   ├── login.png
+│   ├── register.png
+│   ├── dashboard.png
+│   ├── add-note.png
+│   ├── edit-note.png
+│   └── delete-note.png
 │
 └── README.md
 ```
@@ -90,50 +79,61 @@ project/
 
 # Installation
 
-## Clone the Repository
+## 1. Clone Repository
 
 ```bash
-git clone https://github.com/your-username/jwt-notes-app.git
+git clone https://github.com/yourusername/jwt-notes-app.git
+
 cd jwt-notes-app
 ```
 
 ---
 
-# Backend Setup
-
-Navigate to the backend folder:
+## 2. Install Frontend
 
 ```bash
-cd backend
-```
+cd client
 
-Install dependencies:
-
-```bash
 npm install
 ```
 
-Required packages:
+---
+
+## 3. Install Backend
 
 ```bash
-npm install express mongoose cors dotenv bcryptjs jsonwebtoken
+cd ../server
+
+npm install
 ```
 
-Create a **.env** file inside the backend folder.
+---
+
+# Environment Variables
+
+Create a `.env` file inside the **server** folder.
 
 ```env
-MONGO_URI=your_mongodb_connection_string
-JWT_SECRET=your_secret_key
 PORT=5000
+
+JWT_SECRET=your_secret_key
+
+MONGO_URI=mongodb+srv://username:password@cluster.mongodb.net/jwtcrud
 ```
 
-Start the backend server:
+---
+
+# Running the Project
+
+### Start Backend
 
 ```bash
+cd server
+
 npm start
 ```
 
-The server will run at:
+Server runs on
 
 ```
 http://localhost:5000
@@ -141,27 +141,15 @@ http://localhost:5000
 
 ---
 
-# Frontend Setup
-
-Navigate to the frontend folder:
+### Start Frontend
 
 ```bash
-cd frontend
-```
+cd client
 
-Install dependencies:
-
-```bash
-npm install
-```
-
-Start the React application:
-
-```bash
 npm run dev
 ```
 
-The frontend will run at:
+Open
 
 ```
 http://localhost:5173
@@ -169,22 +157,39 @@ http://localhost:5173
 
 ---
 
-# API Endpoints
+# REST API Endpoints
 
-## Register
+## Authentication
 
-**POST**
+### Register
 
 ```
-/register
+POST /register
 ```
 
-Request Body
+Request
 
 ```json
 {
-  "username": "alice",
-  "password": "1234"
+    "username":"john",
+    "password":"123456"
+}
+```
+
+---
+
+### Login
+
+```
+POST /login
+```
+
+Request
+
+```json
+{
+    "username":"john",
+    "password":"123456"
 }
 ```
 
@@ -192,222 +197,224 @@ Response
 
 ```json
 {
-  "message": "Account created! You can now log in."
+    "token":"JWT_TOKEN"
 }
 ```
 
 ---
 
-## Login
+## Notes
 
-**POST**
+### Get All Notes
 
 ```
-/login
+GET /notes
 ```
 
-Request Body
+Authorization
+
+```
+Bearer TOKEN
+```
+
+---
+
+### Create Note
+
+```
+POST /notes
+```
 
 ```json
 {
-  "username": "alice",
-  "password": "1234"
+    "text":"My first note"
 }
 ```
 
-Response
+---
+
+### Update Note
+
+```
+PUT /notes/:id
+```
 
 ```json
 {
-  "token": "JWT_TOKEN"
+    "text":"Updated Note"
 }
 ```
 
 ---
 
-## Get Notes
-
-**GET**
+### Delete Note
 
 ```
-/notes
-```
-
-Header
-
-```
-Authorization: Bearer JWT_TOKEN
+DELETE /notes/:id
 ```
 
 ---
 
-## Create Note
-
-**POST**
+# JWT Authentication Flow
 
 ```
-/notes
-```
+User
+   │
+   │ Register
+   ▼
+Database
 
-Header
+   │
+   │ Login
+   ▼
 
-```
-Authorization: Bearer JWT_TOKEN
-```
+Server
 
-Request Body
+   │
+   │ Verify Password
+   ▼
 
-```json
-{
-  "text": "My first note"
-}
-```
+Generate JWT
 
----
+   │
+   ▼
 
-## Update Note
+Frontend stores Token
 
-**PUT**
+   │
+   ▼
 
-```
-/notes/:id
-```
+Every Protected Request
 
-Request Body
+Authorization:
+Bearer JWT_TOKEN
 
-```json
-{
-  "text": "Updated note"
-}
-```
+   │
+   ▼
 
----
+Server verifies JWT
 
-## Delete Note
+   │
+   ▼
 
-**DELETE**
-
-```
-/notes/:id
+Allow CRUD Operations
 ```
 
 ---
 
-# Authentication Flow
+# Application Workflow
 
 1. Register a new account.
-2. Login using your credentials.
-3. The server verifies the username and password.
-4. A JWT token is generated and returned.
-5. The frontend stores the token.
-6. Every protected request includes:
-
-```
-Authorization: Bearer <JWT_TOKEN>
-```
-
-7. The backend verifies the token before allowing access to notes.
+2. Login using registered credentials.
+3. Server generates a JWT token.
+4. React stores the token in state.
+5. Every request includes the token.
+6. Backend verifies the JWT.
+7. Authenticated users can manage only their own notes.
 
 ---
 
-# MongoDB Collections
+# Password Security
 
-### Users
+Passwords are never stored in plain text.
 
-```json
-{
-  "_id": "...",
-  "username": "alice",
-  "password": "hashed_password"
-}
+Example
+
+```
+123456
+
+↓
+
+$2a$10$E7dH...
 ```
 
-### Notes
+The application uses:
 
-```json
-{
-  "_id": "...",
-  "username": "alice",
-  "text": "My first note",
-  "createdAt": "...",
-  "updatedAt": "..."
-}
+- bcrypt.hash()
+- bcrypt.compare()
+
+---
+
+# Screenshots
+
+## Login Page
+
+```
+assets/login.png
 ```
 
----
-
-# Screens
-
-* Register Page
-* Login Page
-* Notes Dashboard
-* Add Note
-* Edit Note
-* Delete Note
+![Login](assets/Screenshot 2026-07-10 112524.png)
 
 ---
 
-# Security Features
+## Registration Page
 
-* Passwords are hashed using bcrypt.
-* JWT authentication protects all note routes.
-* Users can only access their own notes.
-* Environment variables are used for sensitive credentials.
-* MongoDB Atlas stores user and note data securely.
+```
+assets/register.png
+```
+
+![Register](assets/Screenshot 2026-07-10 113056.png)
 
 ---
 
-# Future Enhancements
 
-* Persistent login using localStorage
-* Refresh Tokens
-* User profile management
-* Search notes
-* Pagination
-* Dark mode
-* Form validation
-* Password reset
-* Unit testing
-* Docker support
+## Add Note
+
+```
+assets/add-note.png
+```
+
+![Add Note](assets/Screenshot 2026-07-10 113331.png)
+
+---
+
+# Future Improvements
+
+- Refresh Tokens
+- Remember Me Login
+- User Profile
+- Dark Mode
+- Categories
+- Search Notes
+- Pagination
+- Rich Text Editor
+- File Upload
+- Note Sharing
+- Password Reset
+- Email Verification
+- Docker Deployment
 
 ---
 
 # Dependencies
 
-### Backend
+Frontend
 
-* express
-* mongoose
-* cors
-* dotenv
-* bcryptjs
-* jsonwebtoken
+```
+react
+```
 
-### Frontend
+Backend
 
-* react
-* react-dom
-* vite
-
----
-
-# License
-
-This project is developed for educational purposes and is free to use, modify, and distribute.
+```
+express
+mongoose
+jsonwebtoken
+bcryptjs
+cors
+dotenv
+```
 
 ---
 
 # Author
 
-**JWT Authentication & Notes CRUD Application**
+**Your Name**
 
-Built using:
+BCA Full Stack Development Project
 
-* React
-* Express.js
-* MongoDB Atlas
-* Mongoose
-* JWT Authentication
-* bcrypt Password Hashing
-* REST API Development
-* Full-Stack JavaScript
+---
+
+# License
+
+This project is developed for educational purposes.
